@@ -48,7 +48,7 @@ def run_config(c: Config):
             # f.write("\n|T| = " + str(len(t)))
 
     vertices_list_old_to_old, vertices_list_new_to_old = None, None
-    if make_vertices:
+    if make_vertices and t_new:
         # Get list of vertices
 
         start = clock()
@@ -70,7 +70,7 @@ def run_config(c: Config):
             # Print the list of vertices
             f.write(str(vertices_list_old_to_old))
 
-    if c.output_subgraphs is not None:
+    if c.output_subgraphs is not None and vertices_list_new_to_old is not None:
         # Get list of subgraphs
         g_subgraphs = DWGraph.get_graphs_by_vertices_list(g0, vertices_list_new_to_old)
         # Save all the subgraphs
