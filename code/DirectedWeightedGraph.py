@@ -15,10 +15,10 @@ class DWGraph(gt.Graph):
 
     EdgesMatchingType = Callable[[Tuple[int, int, float], Tuple[int, int, float]], bool]
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, directed=True):
+        super().__init__(directed=directed)
         self.is_weighted_prop = False
-        self.is_directed_prop = None
+        self.is_directed_prop = directed
         self._labels = {}
         self.info_memoization = {}
 
@@ -129,14 +129,14 @@ class DWGraph(gt.Graph):
         w_list = []
         for e in file_reader:
             w_list.append(e)
-            if make_undirected:
-                if is_weighted:
-                    e = (e[1], e[0], e[2])
-                else:
-                    e = (e[1], e[0])
-                w_list.append(e)
+            # if make_undirected:
+            #     if is_weighted:
+            #         e = (e[1], e[0], e[2])
+            #     else:
+            #         e = (e[1], e[0])
+            #     w_list.append(e)
 
-        g = DWGraph()
+        g = DWGraph(directed=False)
 
         weight_property = g.new_ep('float')
         g.ep['w'] = weight_property
