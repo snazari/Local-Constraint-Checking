@@ -15,10 +15,10 @@ class DWGraph(gt.Graph):
 
     EdgesMatchingType = Callable[[Tuple[int, int, float], Tuple[int, int, float]], bool]
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, directed=True):
+        super().__init__(directed=directed)
         self.is_weighted_prop = False
-        self.is_directed_prop = None
+        self.is_directed_prop = directed
         self._labels = {}
         self.info_memoization = {}
 
@@ -129,14 +129,14 @@ class DWGraph(gt.Graph):
         w_list = []
         for e in file_reader:
             w_list.append(e)
-            if make_undirected:
-                if is_weighted:
-                    e = (e[1], e[0], e[2])
-                else:
-                    e = (e[1], e[0])
-                w_list.append(e)
+            # if make_undirected:
+            #     if is_weighted:
+            #         e = (e[1], e[0], e[2])
+            #     else:
+            #         e = (e[1], e[0])
+            #     w_list.append(e)
 
-        g = DWGraph()
+        g = DWGraph(directed=False)
 
         weight_property = g.new_ep('float')
         g.ep['w'] = weight_property
@@ -152,6 +152,48 @@ class DWGraph(gt.Graph):
                     _v = g.add_vertex()
                     vertices[e[i]] = _v
                     old_label_property[_v] = e[i]
+
+            gt_edge = g.add_edge(vertices[e[0]], vertices[e[1]], False)
+
+            if is_weighted:
+                weight_property[gt_edge] = e[2]
+
+        g.is_weighted_prop = is_weighted
+        g.is_directed_prop = not make_undirected
+
+        g.orig_nodes = list(vertices.keys())
+        g.nodes_orig_new_mapping = vertices
+
+        return g
+
+    @staticmethod
+    def from_edge_list(df, is_weighted=True, skip_first_line=True, make_undirected=False):
+        """
+        Initialize graph from the list of its (un)weighted edges.
+        Each row of input dataframe should have the format
+        vertex1 vertex2 (edge_weight)
+        """
+        w_list = []
+        for e in df.itertuples():
+            e = (e[1],e[2],e[3])
+            w_list.append(e)
+        g = DWGraph(directed=False)
+        weight_property = g.new_ep('float')
+        g.ep['w'] = weight_property
+        old_label_property = g.new_vp('int')
+        g.vp['old'] = old_label_property
+        vertices = {}
+
+        for e in w_list:
+            for i in (0, 1):
+                if e[i] not in vertices:
+                    #print(e)
+                    _v = g.add_vertex()
+                    vertices[e[i]] = _v
+                    try:
+                        old_label_property[_v] = e[i]
+                    except ValueError:
+                        pass
 
             gt_edge = g.add_edge(vertices[e[0]], vertices[e[1]], False)
 
@@ -359,7 +401,7 @@ class DWGraph(gt.Graph):
                 return bad_result
             print('CC started')
             fr, exit_flag, is_cc_effective = DWGraph.cc_r(g, g0, fr, k0, edges_matching)
-            # print('CC done', t)
+            #print('CC done', t)
             print('CC done')
             if exit_flag:
                 return bad_result
@@ -623,6 +665,19 @@ class DWGraph(gt.Graph):
         Assigns Labels to corresponding vertices
         """
         df = pd.read_csv(filepath_or_buffer=file_path, delim_whitespace=True,
+                         names=['v', 'label', 'w'], dtype={'v': np.int32, 'label': np.float64}, header=None)
+        vl, lab_i = df['v'], iter(df['label'])
+        for v in vl:
+            self._labels[v] = next(lab_i)
+        self.set_labels_as_properties()
+
+    def add_labels_from_file_old(self, file_path):
+        """
+        Reads the file each line of which has the format:
+        Vertex Label
+        Assigns Labels to corresponding vertices
+        """
+        df = pd.read_csv(filepath_or_buffer=file_path, delim_whitespace=True,
                          names=['v', 'label', 'w'], dtype={'v': np.int32, 'label': np.int32}, header=None)
         vl, lab_i = df['v'], iter(df['label'])
         for v in vl:
@@ -699,7 +754,7 @@ class DWGraph(gt.Graph):
         '''
         When we match edges, we base on the following:
         |w - w0| < eps  <=>
-        w0 - eps < w < w0 + eps  
+        w0 - eps < w < w0 + eps
         '''
 
         # e2 = 1/(w_eps*2)
