@@ -17,3 +17,6 @@ T: V(A) --> V(Q)
 LCC accepts a query graph and an archive graph to search. It is assumed A>>Q i.e. the order of the archive graph is much larger than the order of the query graph. 
 The algorithm returns a mapping of nodes from the archive graph to the query graph. These are candidate matches. In performing the matching, the lcc algorihtm reduces the dimensionality of the graph.
 This algorithm has time complexity O(V(A)).
+
+#### Data
+The data in the _data_ folder is for unit testing and evaluation only. The data was checked into the repository along with the code for testing purposes. Usually, the graph data will not be stored in a repository with the code. It is better to keep the graph data in a graph database. Here we keep the graph in the repository so we can perform quick tests and algorithm updates without causing regressions in the code. 
