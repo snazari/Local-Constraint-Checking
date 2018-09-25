@@ -1,12 +1,13 @@
 # LCC: graph data dimensionality reduction
 ### Purpose
 This algorithm performs dimensionality reduction on big graph data. The purpose of dimensionality reduction in such datasets is typically to prepare the graph data for more fine grade subgraph matching.
-Typicall, subgraph matching algorithms have polynomial time complexity in the number of nodes in the archive graph. Therefore its advantageous to reduce the archive graph first using a dimensionality reduction apprach such as LCC. 
+Usually, subgraph matching algorithms have polynomial time complexity in the number of nodes in the archive graph. Therefore its advantageous to reduce the archive graph first using a dimensionality reduction apprach such as LCC. 
 ### Background
 Every graph can be decomposed into the union of a spanning tree and the edges of the cycles that are not part of the spanning tree.
-The LCC algorithm implements a dimensionality reduction algorithm based on features that can be extracted from the cycles of the graph vertices. 
-During the subgraph matching step, a MST is constructed which captures the rest of the graph.
+The LCC algorithm implements a dimensionality reduction algorithm based on features that can be extracted from the cycles of the graph vertices. During the subgraph matching step, a MST is constructed which captures the rest of the graph.
 
+The basic idea is depicted in the illustration below.  The template graph contains an attributed graph that we want to match to in the background (Archive) graph. 
+[lcc_operation](/images/lcc_operation.png)
 #### LCC inputs 
 Q (query graph, a subgraph) and A (the archive graph, the graph that Q is contained in)
 
