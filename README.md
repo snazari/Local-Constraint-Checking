@@ -7,7 +7,7 @@ Every graph can be decomposed into the union of a spanning tree and the edges of
 The LCC algorithm implements a dimensionality reduction algorithm based on features that can be extracted from the cycles of the graph vertices. During the subgraph matching step, a MST is constructed which captures the rest of the graph.
 
 The basic idea is depicted in the illustration below.  The template graph contains an attributed graph that we want to match to in the background (Archive) graph. 
-![lcc_operation](/images/lcc_approach.png)
+![lcc_operation](/images/lcc_appraoch.png)
 #### LCC inputs 
 Q (query graph, a subgraph) and A (the archive graph, the graph that Q is contained in)
 
