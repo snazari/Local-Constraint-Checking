@@ -1,4 +1,4 @@
-# LCC: Big graph data dimensionality reduction
+# LCC: graph data dimensionality reduction
 ### Purpose
 This algorithm performs dimensionality reduction on big graph data. The purpose of dimensionality reduction in such datasets is typically to prepare the graph data for more fine grade subgraph matching.
 Typicall, subgraph matching algorithms have polynomial time complexity in the number of nodes in the archive graph. Therefore its advantageous to reduce the archive graph first using a dimensionality reduction apprach such as LCC. 
