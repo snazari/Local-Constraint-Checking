@@ -7,7 +7,7 @@ Every graph can be decomposed into the union of a spanning tree and the edges of
 The LCC algorithm implements a dimensionality reduction algorithm based on features that can be extracted from the cycles of the graph vertices. During the subgraph matching step, a MST is constructed which captures the rest of the graph.
 
 The basic idea is depicted in the illustration below.  The template graph contains an attributed graph that we want to match to in the background (Archive) graph. 
-[lcc_operation](/images/lcc_operation.png)
+![lcc_operation](/images/lcc_approach.png)
 #### LCC inputs 
 Q (query graph, a subgraph) and A (the archive graph, the graph that Q is contained in)
 
@@ -17,7 +17,10 @@ T: V(A) --> V(Q)
 #### Explanation 
 LCC accepts a query graph and an archive graph to search. It is assumed A>>Q i.e. the order of the archive graph is much larger than the order of the query graph. 
 The algorithm returns a mapping of nodes from the archive graph to the query graph. These are candidate matches. In performing the matching, the lcc algorihtm reduces the dimensionality of the graph.
-This algorithm has time complexity O(V(A)).
+This algorithm has time complexity O(V(A)). 
+
+The illustration below is a step by step walkthrough of the algorithm.
+![lcc_step](/images/lcc_operation.png)
 
 #### Data
 The data in the _data_ folder is for unit testing and evaluation only. The data was checked into the repository along with the code for testing purposes. Usually, the graph data will not be stored in a repository with the code. It is better to keep the graph data in a graph database. Here we keep the graph in the repository so we can perform quick tests and algorithm updates without causing regressions in the code. 
